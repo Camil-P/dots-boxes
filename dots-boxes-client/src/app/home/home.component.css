@@ -1,0 +1,50 @@
+:host{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 50rem;
+    width: 100%;
+}
+
+h1{
+    width: 80%;
+    height: 10%;
+    margin: 1% auto;
+    text-align: center;
+    color: red;
+}
+
+label{
+    text-align: center;
+}
+
+input{
+    height: 7%;
+    width: 70%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+select{
+    height: 9%;
+    width: 72%;
+    margin: 0 auto;
+    text-align-last:center;
+}
+
+button{
+    height: 10%;
+    width: 75%;
+    margin: 0 auto;
+    color: seashell;
+    background-color: royalblue;    
+}
+
+.container{
+    width: 35%;
+    height: 45%;
+    margin: 1% auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
