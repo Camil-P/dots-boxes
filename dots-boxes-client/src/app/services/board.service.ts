@@ -18,7 +18,7 @@ export class BoardService {
   rowArray: number[] = [];
   columnArray: number[] = [];
 
-  selectedOponent = oponentType.Player;
+  selectedOponent = oponentType.AI;
   selectedMod = modType.easy;
 
   gameAvailable: boolean = false;
@@ -36,8 +36,8 @@ export class BoardService {
   }
 
   request(stateMatrix: Square[][]): Observable<any> {
-    const request = { matrix: stateMatrix, mod: this.selectedMod }
-    return this.httpClient.post<any>(`${this.baseUrl}`, request);
+    const request : Request = { matrix: stateMatrix, mod: this.selectedMod };
+    return this.httpClient.post<any>(this.baseUrl, request);
   }
 }
 
@@ -51,3 +51,4 @@ export enum modType {
   medium = "Medium",
   hard = "Hard",
 }
+
