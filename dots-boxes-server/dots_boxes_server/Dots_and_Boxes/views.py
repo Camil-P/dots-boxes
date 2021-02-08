@@ -18,88 +18,139 @@ def apiOverview(request):
 
      matrix = requestBody['matrix']
      mod = requestBody['mod']
-     
-     # for i in range(len(matrix)):
-     #      for j in range(len(matrix[0])):
-     #           print(matrix[i][j])
 
-     move = ""
-
-     if mod == "Easy":
-          move = AIMove(matrix, mod)
-     # elif mod == "Medium":
-          
-     # else: 
+     move = AIMove(matrix, mod)
 
      return Response(move)
 
-def miniMax(matrix, mod):
-     return 1
 
 def AIMove(matrix, mod):
      bestMove = ""
      score = -math.inf
      bestScore = -math.inf
      rowNumber = len(matrix)
-     colNumber = len(matrix[0])
+     colNumber = len(matrix[0])  
 
      for i in range(rowNumber):
           for j in range(colNumber):
-               if(matrix[i][j]['allSides'] == 0):
-                    if i < rowNumber-1: # horizontal clicks
-                         if matrix[i][j]['top'] == False: 
-                              print(str(j))
-                              matrix[i][j]['top'] = True 
-                              if i > 0: matrix[i-1][j]['bottom'] = True 
-                              score = miniMax(matrix, mod)
-                              if score > bestScore: # set score
-                                   bestScore = score
-                                   bestMove = str(i) + str(j) + 'h'
-                                   print(str(i) + str(j))
-                              matrix[i][j]['top'] = False
-                              if i > 0: matrix[i-1][j]['bottom'] = False        
-                    else:
-                         if matrix[i][j]['top'] == False:
-                              matrix[i][j]['top'] = True
-                              score = miniMax(matrix, mod)
-                              matrix[i][j]['top'] = False
-                         else:
-                              if matrix[i][j]['bottom'] == False: 
-                                   matrix[i][j]['bottom'] = True 
-                                   score = miniMax(matrix, mod)
-                                   matrix[i][j]['bottom'] = False
-                         if score > bestScore: # set score
-                              bestScore = score
-                              if matrix[i][j]['top'] != False: bestMove = str(i+1) 
-                              else: bestMove = str(i)
-                              bestMove += str(j) + 'h'
 
-                    if j < colNumber-1: # vertical clicks
-                         if matrix[i][j]['left'] == False: # 1 3
-                              matrix[i][j]['left'] = True 
-                              if j > 0: 
-                                   matrix[i][j-1]['right'] = True 
-                              score = miniMax(matrix, mod)
-                              matrix[i][j]['left'] = False 
-                              if j > 0: matrix[i][j-1]['right'] = False 
-                              if score > bestScore: # set score
-                                   bestScore = score
-                                   bestMove = str(i) + str(j) + 'v'
-                    else:
-                         if matrix[i][j]['left'] == False:
-                              matrix[i][j]['left'] = True
-                              matrix[i][j-1]['right'] = True 
-                              score = miniMax(matrix, mod)
-                              matrix[i][j]['left'] = False
-                              matrix[i][j-1]['right'] = False 
-                         else: 
-                              if matrix[i][j]['right'] == False: 
-                                   matrix[i][j]['right'] = True 
-                                   score = miniMax(matrix, mod)
-                                   matrix[i][j]['right'] = False 
-                         if score > bestScore: # set score
-                              bestScore = score
-                              if matrix[i][j]['left'] != False: bestMove = str(i) + str(j+1) 
-                              else: bestMove = str(i) + str(j)
-                              bestMove += 'v'
+               m = makeMove(matrix, i, j)
+               if(len(m) > 0):
+                    matrix[m[0]][m[1]][m[2]] = True                        #making a move
+                    if(len(m) > 3): matrix[m[3]][m[4]][m[5]] = True
+
+                    score = miniMax(matrix, m, mod)                           #setting score
+
+                    matrix[m[0]][m[1]]['clickedSides'] -= 1
+                    matrix[m[0]][m[1]][m[2]] = False
+                    if(len(m) > 3): 
+                         matrix[m[3]][m[4]][m[5]] = False       #undo on a move
+                         matrix[m[3]][m[4]]['clickedSides'] -= 1
+
+                    if score > bestScore:                                  #set the best score
+                         bestMove = setBestMove(m, rowNumber, colNumber)
+                         bestScore = score
+                         
      return bestMove
+
+
+def miniMax(matrix, m, mod, depth):
+     if mod == "Hard":
+          points = hardHeur(matrix, m)
+          if depth == 6 or points >= 10: 
+               return points
+     if mod == "Medium":
+          return mediumHeur(matrix, m)
+     if mod == "Easy":
+          return easyHeur(matrix, m)
+
+
+def mediumHeur(matrix, m):                                                # Nacin poentiranja: 
+     score = 0                                                            # za 4. stranu 1 kocke = 10 pena, 2 kocke jos 10
+     matrix[m[0]][m[1]]['clickedSides'] += 1                              # za 3. stranu 1 kocke = -10 pena, 2 kocke jos -10
+     if matrix[m[0]][m[1]]['clickedSides'] == 4: score = 10               # za 2. stranu 1 kocke = 5 pena, 2 kocke jos 5
+     elif matrix[m[0]][m[1]]['clickedSides'] == 2: score = 5              # za 1. stranu 1 kocke = 1 pena, 2 kocke jos 1
+     elif matrix[m[0]][m[1]]['clickedSides'] == 1: score = 1
+     else: score = -10
+     if len(m) > 3: 
+          matrix[m[3]][m[4]]['clickedSides'] += 1
+          if matrix[m[3]][m[4]]['clickedSides'] == 4: score += 10
+          elif matrix[m[3]][m[4]]['clickedSides'] == 2: score += 5
+          elif matrix[m[3]][m[4]]['clickedSides'] == 1: score += 1
+          else: score -= 10 
+
+     return score
+
+
+def easyHeur(matrix, m):
+     matrix[m[0]][m[1]]['clickedSides'] += 1
+     if len(m) > 3: 
+          matrix[m[3]][m[4]]['clickedSides'] += 1
+          if matrix[m[3]][m[4]]['clickedSides'] == 4: 
+               score = 10
+               if matrix[m[0]][m[1]]['clickedSides'] == 4: score += 10
+               return score
+
+     if matrix[m[0]][m[1]]['clickedSides'] == 4: return 10
+     return 1
+
+
+
+def makeMove(matrix, i, j):
+     move = []
+     
+     if(matrix[i][j]['allSides'] == 0):
+          if i < (len(matrix)-1): # horizontal clicks
+               if matrix[i][j]['top'] == False:
+                    move.append(i)
+                    move.append(j)
+                    move.append("top")
+                    if i > 0: 
+                         move.append(i-1)
+                         move.append(j)
+                         move.append("bottom")
+          else:
+               if matrix[i][j]['top'] == False:
+                    move.append(i)
+                    move.append(j)
+                    move.append("top")
+                    move.append(i-1)
+                    move.append(j)
+                    move.append("bottom")
+               else:
+                    if matrix[i][j]['bottom'] == False: 
+                         move.append(i)
+                         move.append(j)
+                         move.append("bottom")
+
+          if len(move) == 0:
+               if j < (len(matrix[0])-1): # vertical clicks
+                    if matrix[i][j]['left'] == False:
+                         move.append(i)
+                         move.append(j)
+                         move.append("left")
+                         if j > 0: 
+                              move.append(i)
+                              move.append(j-1)
+                              move.append("right")
+               else:
+                    if matrix[i][j]['left'] == False:
+                         move.append(i)
+                         move.append(j)
+                         move.append("left")
+                         move.append(i)
+                         move.append(j-1)
+                         move.append("right")
+                    else: 
+                         if matrix[i][j]['right'] == False: 
+                              move.append(i)
+                              move.append(j)
+                              move.append("right")
+     return move
+                              
+def setBestMove(m, rowNumber, colNumber):
+     if m[2] == "top" : bestMove = str(m[0]) + str(m[1]) + "h"
+     if m[0] == rowNumber - 1 and m[2] == "bottom" : bestMove = str(m[0]+1) + str(m[1]) + "h"
+     if m[2] == "left" : bestMove = str(m[0]) + str(m[1]) + "v"
+     if m[1] == colNumber - 1 and m[2] == "right" : bestMove = str(m[0]) + str(m[1]+1) + "v"
+     return bestMove     
