@@ -20,6 +20,8 @@ export class BoardComponent {
 
   stateMatrix: Square[][] = [];
 
+  moves : String[] = [];
+
   constructor(public boardService: BoardService) {
     for (let i = 0; i < this.boardService.rowNumber; i++) {
       this.stateMatrix[i] = [];
@@ -36,7 +38,7 @@ export class BoardComponent {
 
   horizontalClick(Col: number, firstRow: number, secondRow: number) {
     const player = this.isFirstPlayer ? "Igrac : " : "AI : "
-    console.log(player + "Selektovane kocke se nalaze u " + Col + " koloni i " + firstRow + " i " + secondRow + " redu.");
+    this.moves.push(player + "Selektovano polje se nalazi u " + Col + " koloni, " + firstRow + " i " + secondRow + " redu.");
 
     var provera = false;
     const cloneMatricaStanja = [...this.stateMatrix];
@@ -71,7 +73,6 @@ export class BoardComponent {
     }
     this.stateMatrix = cloneMatricaStanja;
     this.setScore(provera);
-    console.log(this.score2);
     if (!this.isFirstPlayer && this.boardService.selectedOponent === oponentType.AI && this.score2 <= this.pobeda) {
       this.AIMove();
     }
@@ -79,7 +80,7 @@ export class BoardComponent {
 
   verticalClick(Row: number, firstCol: number, secondCol: number) {
     const player = this.isFirstPlayer ? "Igrac : " : "AI : "
-    console.log(player + "Selektovane kocke se nalaze u " + Row + " redu i " + firstCol + " i " + secondCol + " koloni.");
+    this.moves.push(player + "Selektovano polje se nalazi u: " + Row + " redu, " + firstCol + " i " + secondCol + " koloni.");
 
     var provera = false;
     const cloneMatricaStanja = [...this.stateMatrix];
@@ -114,7 +115,6 @@ export class BoardComponent {
     }
     this.stateMatrix = cloneMatricaStanja;
     this.setScore(provera);
-    console.log(this.score2);
     if (!this.isFirstPlayer && this.boardService.selectedOponent === oponentType.AI && this.score2 <= this.pobeda) {
       this.AIMove();
     }
@@ -143,11 +143,11 @@ export class BoardComponent {
   setScore(check: boolean) {
     if (check) {
       if (this.isFirstPlayer) {
-        console.log("IGRAC JE UZEO POEN!");
+        this.moves.push("IGRAC JE UZEO POEN!");
         this.score1 += 1;
       }
       else {
-        console.log("AI JE UZEO POEN!");
+        this.moves.push("AI JE UZEO POEN!");
         this.score2 += 1;
       }
     }

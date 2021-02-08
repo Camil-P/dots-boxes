@@ -19,7 +19,7 @@ export class BoardService {
   columnArray: number[] = [];
 
   selectedOponent = oponentType.AI;
-  selectedMod = modType.easy;
+  selectedMod = modType.hard;
 
   gameAvailable: boolean = false;
 
