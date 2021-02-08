@@ -12,13 +12,13 @@ interface Request {
   providedIn: 'root'
 })
 export class BoardService {
-  rowNumber: number = 5;
-  colNumber: number = 5;
+  rowNumber: number = 4;
+  colNumber: number = 4;
 
   rowArray: number[] = [];
   columnArray: number[] = [];
 
-  selectedOponent = oponentType.Player;
+  selectedOponent = oponentType.AI;
   selectedMod = modType.easy;
 
   gameAvailable: boolean = false;
@@ -36,8 +36,8 @@ export class BoardService {
   }
 
   request(stateMatrix: Square[][]): Observable<any> {
-    const request = { matrix: stateMatrix, mod: this.selectedMod }
-    return this.httpClient.post<any>(`${this.baseUrl}`, request);
+    const request : Request = { matrix: stateMatrix, mod: this.selectedMod };
+    return this.httpClient.post<any>(this.baseUrl, request);
   }
 }
 
@@ -51,3 +51,4 @@ export enum modType {
   medium = "Medium",
   hard = "Hard",
 }
+

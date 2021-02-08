@@ -30,11 +30,13 @@ export class BoardComponent {
 
     this.height = (100 / this.boardService.rowNumber) + "%";
     this.width = (100 / this.boardService.colNumber) + "%";
-    this.pobeda = ((this.boardService.rowArray.length - 1) * (this.boardService.columnArray.length - 1)) / 2 + 1;
+    this.pobeda = Math.floor(((this.boardService.rowNumber) * (this.boardService.colNumber)) / 2);
+    console.log(this.pobeda);
   }
 
   horizontalClick(Col: number, firstRow: number, secondRow: number) {
-    console.log("Selektovane kocke se nalaze u " + Col + " koloni i " + firstRow + " i " + secondRow + " redu.");
+    const player = this.isFirstPlayer ? "Igrac : " : "AI : "
+    console.log(player + "Selektovane kocke se nalaze u " + Col + " koloni i " + firstRow + " i " + secondRow + " redu.");
 
     var provera = false;
     const cloneMatricaStanja = [...this.stateMatrix];
@@ -59,6 +61,7 @@ export class BoardComponent {
       cloneMatricaStanja[firstRow][Col].clickedSides += 1;
       cloneMatricaStanja[secondRow][Col].clickedSides += 1;
       if (cloneMatricaStanja[secondRow][Col].setInnerDiv(this.isFirstPlayer) && cloneMatricaStanja[firstRow][Col].setInnerDiv(this.isFirstPlayer)) {
+        this.setScore(true);
         provera = true;
       }
       else if (cloneMatricaStanja[secondRow][Col].setInnerDiv(this.isFirstPlayer) && !cloneMatricaStanja[firstRow][Col].setInnerDiv(this.isFirstPlayer)
@@ -68,13 +71,15 @@ export class BoardComponent {
     }
     this.stateMatrix = cloneMatricaStanja;
     this.setScore(provera);
-    if (!this.isFirstPlayer && this.boardService.selectedOponent === oponentType.AI) {
+    console.log(this.score2);
+    if (!this.isFirstPlayer && this.boardService.selectedOponent === oponentType.AI && this.score2 <= this.pobeda) {
       this.AIMove();
     }
   }
 
   verticalClick(Row: number, firstCol: number, secondCol: number) {
-    console.log("Selektovane kocke se nalaze u " + Row + " redu i " + firstCol + " i " + secondCol + " koloni.");
+    const player = this.isFirstPlayer ? "Igrac : " : "AI : "
+    console.log(player + "Selektovane kocke se nalaze u " + Row + " redu i " + firstCol + " i " + secondCol + " koloni.");
 
     var provera = false;
     const cloneMatricaStanja = [...this.stateMatrix];
@@ -109,35 +114,40 @@ export class BoardComponent {
     }
     this.stateMatrix = cloneMatricaStanja;
     this.setScore(provera);
-    if (!this.isFirstPlayer && this.boardService.selectedOponent === oponentType.AI) {
+    console.log(this.score2);
+    if (!this.isFirstPlayer && this.boardService.selectedOponent === oponentType.AI && this.score2 <= this.pobeda) {
       this.AIMove();
     }
   }
 
   AIMove() {
+    var isResponse = false
     const subscription = this.boardService.request(this.stateMatrix).subscribe(response => {
-      switch (response.side) {
+      console.log(response);
+      switch (response.charAt(2)) {
         case "v":
-          this.verticalClick(response.i, response.j - 1, response.j);
+          isResponse = true;
+          this.verticalClick(parseInt(response.charAt(0)), parseInt(response.charAt(1)) - 1, parseInt(response.charAt(1)));
           break;
         case "h":
-          this.horizontalClick(response.j, response.i - 1, response.i);
-          break;
-        default:
-          console.log(response);
+          isResponse = true;
+          this.horizontalClick(parseInt(response.charAt(1)), parseInt(response.charAt(0)) - 1, parseInt(response.charAt(0)));
           break;
       }
-
+      if(isResponse){
+        subscription.unsubscribe();
+      }
     });
-    subscription.unsubscribe();
   }
 
   setScore(check: boolean) {
     if (check) {
       if (this.isFirstPlayer) {
+        console.log("IGRAC JE UZEO POEN!");
         this.score1 += 1;
       }
       else {
+        console.log("AI JE UZEO POEN!");
         this.score2 += 1;
       }
     }
@@ -148,7 +158,7 @@ export class BoardComponent {
 
   get getPlayer() {
     if (this.isFirstPlayer) {
-      if (this.score1 >= this.pobeda) {
+      if (this.score1 > this.pobeda) {
         return "1. IGRAC JE POBEDIO!"
       }
       else {
@@ -156,11 +166,11 @@ export class BoardComponent {
       }
     }
     else {
-      if (this.score2 >= this.pobeda) {
-        return "2. IGRAC JE POBEDIO!"
+      if (this.score2 > this.pobeda) {
+        return this.boardService.selectedOponent == oponentType.Player ? "2. IGRAC JE POBEDIO!" : "AI JE POBEDIO!"; 
       }
       else {
-        return "2. Igrac je na redu";
+        return this.boardService.selectedOponent == oponentType.Player ? "2. igrac je na redu" : "AI je na redu";
       }
     }
   }
