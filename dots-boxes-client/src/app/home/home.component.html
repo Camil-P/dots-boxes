@@ -12,8 +12,8 @@
         <option *ngFor="let oponent of oponents" [value]="oponent">{{oponent}}</option>
     </select>
     <br>
-    <label for="modType">Selektujte tezinu: </label>  
-    <select [(ngModel)]="boardService.selectedMod" name="modType" id="modType">
+    <label *ngIf="boardService.selectedOponent == oponents[1]" for="modType">Selektujte tezinu: </label>  
+    <select *ngIf="boardService.selectedOponent == oponents[1]" [(ngModel)]="boardService.selectedMod" name="modType" id="modType">
         <option *ngFor="let mod of mods" [value]="mod">{{mod}}</option>
     </select>
     <br>
