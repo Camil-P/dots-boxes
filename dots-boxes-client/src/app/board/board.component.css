@@ -1,7 +1,7 @@
 .board-container {
   width: 60rem;
   height: 600px;
-  margin: auto;
+  margin: 1% auto;
 }
 
 /* Dugmici (hovered, clicked) /////////////////////////////////////////////////////////////////////////////*/
