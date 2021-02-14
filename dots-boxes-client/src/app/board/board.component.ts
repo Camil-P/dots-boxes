@@ -195,7 +195,7 @@ export class BoardComponent {
     }
     else {
       if (this.score2 > this.pobeda) {
-        const por = oponentType.Player ? "2. IGRAC JE POBEDIO!" : "AI JE POBEDIO!";
+        const por = this.boardService.selectedOponent == oponentType.Player ? "2. IGRAC JE POBEDIO!" : "AI JE POBEDIO!";
         this.moves.push(por);
         return por;
       }

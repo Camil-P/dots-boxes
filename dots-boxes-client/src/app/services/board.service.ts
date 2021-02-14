@@ -23,7 +23,7 @@ export class BoardService {
 
   gameAvailable: boolean = false;
 
-  baseUrl = 'http://127.0.0.1:8000/api/';
+  baseUrl = 'http://camil.pythonanywhere.com/api/';
   constructor(private httpClient: HttpClient) { }
 
   createArrays() {
