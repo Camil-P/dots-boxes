@@ -34,7 +34,6 @@ export class BoardComponent {
     this.height = (100 / this.boardService.rowNumber) + "%";
     this.width = (100 / this.boardService.colNumber) + "%";
     this.pobeda = Math.floor(((this.boardService.rowNumber) * (this.boardService.colNumber)) / 2);
-    console.log(this.pobeda);
   }
 
   horizontalClick(Col: number, firstRow: number, secondRow: number) {
@@ -136,7 +135,6 @@ export class BoardComponent {
   AIMove() {
     var isResponse = false
     const subscription = this.boardService.request(this.stateMatrix).subscribe(response => {
-      console.log(response);
       switch (response.charAt(2)) {
         case "v":
           isResponse = true;

@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "dotsandboxes-uni"
+  },
+  "targets": {
+    "dotsandboxes-uni": {
+      "hosting": {
+        "dots-boxes": [
+          "dotsandboxes-uni"
+        ]
+      }
+    }
+  }
+}

@@ -117,6 +117,10 @@
               "devServerTarget": "dots-boxes:serve:production"
             }
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {}
         }
       }
     }

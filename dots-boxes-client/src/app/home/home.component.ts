@@ -17,7 +17,6 @@ export class HomeComponent {
 
   goToGame(){
     this.boardService.createArrays();
-    console.log(this.boardService.selectedMod + " " + this.boardService.selectedOponent);
     this.newItemEvent.emit();
   }
 
