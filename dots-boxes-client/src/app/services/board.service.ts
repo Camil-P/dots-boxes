@@ -12,8 +12,8 @@ interface Request {
   providedIn: 'root'
 })
 export class BoardService {
-  rowNumber: number = 4;
-  colNumber: number = 4;
+  rowNumber: number = 5;
+  colNumber: number = 5;
 
   rowArray: number[] = [];
   columnArray: number[] = [];
