@@ -1,5 +1,6 @@
 import json
 import math
+from random import *
 
 from django.shortcuts import render
 from django.http.response import JsonResponse
@@ -218,7 +219,7 @@ def easyHeur(matrix, m):
 
      if matrix[m[0]][m[1]]['clickedSides'] == 4: 
           return 10
-     return 1
+     return randrange(10)
 
 
 

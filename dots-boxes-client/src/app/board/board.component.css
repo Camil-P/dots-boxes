@@ -1,6 +1,6 @@
 .board-container {
-  width: 60rem;
-  height: 600px;
+  width: 55rem;
+  height: 550px;
   margin: 1% auto;
 }
 
@@ -48,7 +48,7 @@
 .innerDiv {
   height: 100%;
   width: 80%;
-  background-color: rgba(230, 224, 219, 0.8);
+  /* background-color: rgba(230, 224, 219, 0.8); */
   margin: 0px;
 }
 

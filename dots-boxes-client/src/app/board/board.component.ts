@@ -11,7 +11,7 @@ import { Square } from '../type';
 export class BoardComponent {
   height: string = "";
   width: string = "";
-
+  igraBot = false;
   pobeda: number = 0;
 
   score1: number = 0;
@@ -80,6 +80,7 @@ export class BoardComponent {
     this.stateMatrix = cloneMatricaStanja;
     this.setScore(provera);
     if (!this.isFirstPlayer && this.boardService.selectedOponent === oponentType.AI && this.score2 <= this.pobeda) {
+      this.igraBot = true;
       this.AIMove();
     }
   }
@@ -128,6 +129,7 @@ export class BoardComponent {
     this.stateMatrix = cloneMatricaStanja;
     this.setScore(provera);
     if (!this.isFirstPlayer && this.boardService.selectedOponent === oponentType.AI && this.score2 <= this.pobeda) {
+      this.igraBot = true;
       this.AIMove();
     }
   }
@@ -188,6 +190,7 @@ export class BoardComponent {
         return "REZULTAT JE NERESEN!";
       }
       else {
+        this.igraBot = false;
         return "1. Igrac je na redu";
       }
     }

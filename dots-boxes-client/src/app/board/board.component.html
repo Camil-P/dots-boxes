@@ -14,22 +14,22 @@
                     </div>
                     <div *ngIf='j < boardService.columnArray.length-1 && i !== boardService.rowArray.length-1'
                         [class.hButton]="!stateMatrix[i][j].top" [class.clickedH]="stateMatrix[i][j].top"
-                        (click)="(!stateMatrix[i][j].top && (score1 <= pobeda && score2 <= pobeda)) && horizontalClick(j, i-1, i)">
+                        (click)="(!stateMatrix[i][j].top && (score1 <= pobeda && score2 <= pobeda)) && !igraBot  && horizontalClick(j, i-1, i)">
                     </div>
                     <div *ngIf='j < boardService.columnArray.length-1 && i === boardService.rowArray.length-1'
                         [class.hButton]="!stateMatrix[i-1][j].bottom" [class.clickedH]="stateMatrix[i-1][j].bottom"
-                        (click)="(!stateMatrix[i-1][j].bottom && (score1 <= pobeda && score2 <= pobeda)) && horizontalClick(j, i-1, i)">
+                        (click)="(!stateMatrix[i-1][j].bottom && (score1 <= pobeda && score2 <= pobeda)) && !igraBot && horizontalClick(j, i-1, i)">
                     </div>
                 </div>
 
                 <div *ngIf="i < boardService.rowArray.length-1" style="display: flex;width: 100%;height: 80%;">
                     <div *ngIf="j < boardService.columnArray.length-1" [class.vButton]="!stateMatrix[i][j].left"
                         [class.clickedV]="stateMatrix[i][j].left"
-                        (click)="(!stateMatrix[i][j].left && (score1 <= pobeda && score2 <= pobeda)) && verticalClick(i, j-1, j)">
+                        (click)="(!stateMatrix[i][j].left && (score1 <= pobeda && score2 <= pobeda)) && !igraBot  && verticalClick(i, j-1, j)">
                     </div>
                     <div *ngIf="j === boardService.columnArray.length-1" [class.vButton]="!stateMatrix[i][j-1].right"
                         [class.clickedV]="stateMatrix[i][j-1].right"
-                        (click)="(!stateMatrix[i][j-1].right && (score1 <= pobeda && score2 <= pobeda)) && verticalClick(i, j-1, j)">
+                        (click)="(!stateMatrix[i][j-1].right && (score1 <= pobeda && score2 <= pobeda)) && !igraBot  && verticalClick(i, j-1, j)">
                     </div>
                     <div *ngIf='j < boardService.columnArray.length-1'
                         [class.innerDiv]="stateMatrix[i][j].allSides === 0"
